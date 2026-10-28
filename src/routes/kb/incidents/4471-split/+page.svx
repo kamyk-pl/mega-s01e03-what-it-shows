@@ -8,23 +8,9 @@ signature: v1.eyJzdWIiOiI0OTY1IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYX
 ---
 
 <script>
-  import reports from '#lib/data/reports-4471.json';
-  import notes from '#lib/data/desk-notes.json';
-  import { groupByCause, uniqueById } from '#lib/kb/causes';
-  import { tenantOf } from '#lib/kb/locales';
+  import CauseTable from '#lib/kb/CauseTable.svelte';
   import Callout from '#lib/kb/Callout.svelte';
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
-
-  const ISSUES = 'https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/';
-  const merged = uniqueById(reports).filter((r) => r.mergedInto === 4471);
-  const oneDay = merged.filter((r) => notes.oneDayMove.includes(r.id));
-  const byCause = groupByCause(merged.filter((r) => !notes.oneDayMove.includes(r.id)), tenantOf);
-  const count = (cause) => byCause.find((g) => g.cause === cause)?.reports.length ?? 0;
-  const split = [
-    { problem: 'parser', what: 'day and month swapped by the shared parser', n: count('parser'), issue: 1 },
-    { problem: 'hint', what: 'booking-v3 form hints MM/DD to day-first tenants', n: count('hint'), issue: 2 },
-    { problem: 'one-day', what: 'date moves by one day', n: oneDay.length, issue: 4 },
-  ];
 </script>
 
 [#4471](/kb/incidents/4471) says one issue, one fix queued. Its own table already disagrees: it
@@ -39,25 +25,17 @@ Keep #4471 open until all three tickets are closed.
 
 ## The split
 
-**{merged.length}** reports in #4471, each in one ticket:
+This is the desk's own table for #4471, built from the export. Each problem in it has a ticket:
 
-<table>
-  <thead><tr><th>problem</th><th>reports</th><th>ticket</th></tr></thead>
-  <tbody>
-    {#each split as row}
-      <tr>
-        <td><code>{row.problem}</code> · {row.what}</td>
-        <td>{row.n}</td>
-        <td><a href={ISSUES + row.issue}>issue {row.issue}</a></td>
-      </tr>
-    {/each}
-  </tbody>
-</table>
+- `parser` row → [issue 1](https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/1)
+- `hint` row → [issue 2](https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/2)
+- the one-day moves in the note under the table → [issue 4](https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/4)
 
-Counted with the desk's own code: one report per id (`uniqueById`), cause by tenant and form
-(`causes.ts`), not by intake tag. The one-day moves are the reports the desk itself noted in
-`desk-notes.json`. [#4471](/kb/incidents/4471) files them under `parser`; here they are taken out
-of `parser` and counted once, in their own ticket.
+<CauseTable ticket={4471} />
+
+Each ticket carries the count this table shows. The one-day moves stay counted in the `parser`
+row, where the desk files them, so the one-day ticket is part of the `parser` ticket, not extra.
+Causes follow `causes.ts`: the tenant's locale and booking form, not the intake tag.
 
 ## `parser`: day and month swapped
 
@@ -95,7 +73,7 @@ Tuesday and a client in Toronto gets Monday for the same meeting. An invite arri
 booking was made.
 
 **Why it is different.** The desk had already read these as one-day moves (`desk-notes.json`),
-but #4471 files them under `parser` by tenant. They belong to this ticket, not the `parser` one. The date is converted across time zones, so it
+but #4471 files them under `parser` by tenant, and the `parser` ticket counts them too. The date is converted across time zones, so it
 lands on the neighbouring day. It needs a separate look at how invites store and send times.
 
 **Fix.** Unknown yet. Start from these reports.

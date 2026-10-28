@@ -6,33 +6,32 @@
     
 		<link href="../../../_app/immutable/assets/runbook.9BJ9BomY.css" rel="stylesheet">
 		<link href="../../../_app/immutable/assets/Callout.89E4ZsOX.css" rel="stylesheet">
+		<link href="../../../_app/immutable/assets/CauseTable.AZcnZ4nk.css" rel="stylesheet">
 		<link href="../../../_app/immutable/assets/5.BjoaMlTP.css" rel="stylesheet">
-		<link rel="modulepreload" href="../../../_app/immutable/entry/start.C9NPMI6E.js">
-		<link rel="modulepreload" href="../../../_app/immutable/chunks/DV2CFgpQ.js">
-		<link rel="modulepreload" href="../../../_app/immutable/chunks/WLr3OCk2.js">
-		<link rel="modulepreload" href="../../../_app/immutable/chunks/CaskBBMd.js">
-		<link rel="modulepreload" href="../../../_app/immutable/entry/app.dpw1JObR.js">
-		<link rel="modulepreload" href="../../../_app/immutable/chunks/CxLjh0hF.js">
-		<link rel="modulepreload" href="../../../_app/immutable/chunks/BxHaDExg.js">
-		<link rel="modulepreload" href="../../../_app/immutable/chunks/BviaqjHR.js">
-		<link rel="modulepreload" href="../../../_app/immutable/nodes/0.fp_j_brR.js">
-		<link rel="modulepreload" href="../../../_app/immutable/chunks/BAC74Pmu.js">
-		<link rel="modulepreload" href="../../../_app/immutable/nodes/5.Ck559Q8k.js">
-		<link rel="modulepreload" href="../../../_app/immutable/chunks/B1ZSDDp0.js">
-		<link rel="modulepreload" href="../../../_app/immutable/chunks/CSay-iu-.js">
-		<link rel="modulepreload" href="../../../_app/immutable/chunks/CcZCyuhj.js">
-		<link rel="modulepreload" href="../../../_app/immutable/chunks/BWUPc4Cf.js">
-		<link rel="modulepreload" href="../../../_app/immutable/chunks/g_DrDor4.js">
-		<link rel="modulepreload" href="../../../_app/immutable/chunks/iXLSwIXB.js"><!--[--><!--]--><title>#4471 split: three problems, not one · support kb</title>
+		<link rel="modulepreload" href="../../../_app/immutable/entry/start.D2N_MOeb.js">
+		<link rel="modulepreload" href="../../../_app/immutable/chunks/B4hUSgsl.js">
+		<link rel="modulepreload" href="../../../_app/immutable/chunks/D2mDbKsL.js">
+		<link rel="modulepreload" href="../../../_app/immutable/chunks/DEk3U65C.js">
+		<link rel="modulepreload" href="../../../_app/immutable/entry/app.DG1GfY9u.js">
+		<link rel="modulepreload" href="../../../_app/immutable/chunks/DnL2WVvh.js">
+		<link rel="modulepreload" href="../../../_app/immutable/chunks/CehajMgd.js">
+		<link rel="modulepreload" href="../../../_app/immutable/chunks/CLJSIaTB.js">
+		<link rel="modulepreload" href="../../../_app/immutable/nodes/0.eUQlVXWG.js">
+		<link rel="modulepreload" href="../../../_app/immutable/chunks/CXN4fkzy.js">
+		<link rel="modulepreload" href="../../../_app/immutable/nodes/5.CoAKVz2b.js">
+		<link rel="modulepreload" href="../../../_app/immutable/chunks/Brad_mhP.js">
+		<link rel="modulepreload" href="../../../_app/immutable/chunks/bZka5cch.js">
+		<link rel="modulepreload" href="../../../_app/immutable/chunks/D3Jp9HkG.js">
+		<link rel="modulepreload" href="../../../_app/immutable/chunks/j0bVihhH.js">
+		<link rel="modulepreload" href="../../../_app/immutable/chunks/C7-lgDTk.js"><!--[--><!--]--><title>#4471 split: three problems, not one · support kb</title>
   </head>
   <body data-sveltekit-preload-data="hover">
     <div style="display: contents"><!--[--><!--[--><!----><!----><div class="kb svelte-60g32v"><header><a class="crumb svelte-60g32v" href="/kb">support desk · kb</a> <h1 class="svelte-60g32v">#4471 split: three problems, not one</h1> <p class="meta svelte-60g32v"><span>owner <b>kamyk-pl</b></span> <span class="status proposed svelte-60g32v">proposed</span> <span class="svelte-60g32v">reviewed 2026-10-28 · 0 days ago</span></p></header> <!--[!--><!--]--> <main><p><a href="/kb/incidents/4471">#4471</a> says one issue, one fix queued. Its own table already disagrees: it
 shows a second cause with no ticket of its own and a footnote about one-day moves. Read by cause
 instead of by subject, the reports hold three problems. Each one has its own ticket now, and
 fixing one does not close the others.</p> <aside class="warn svelte-hdh0t2"><!---->The parser fix queued for #4471 will not stop the booking-v3 form reports or the one-day moves.
-Keep #4471 open until all three tickets are closed.<!----></aside><!----> <h2>The split</h2> <p><strong>412</strong> reports in #4471, each in one ticket:</p> <table><thead><tr><th>problem</th><th>reports</th><th>ticket</th></tr></thead><tbody><!--[--><tr><td><code>parser</code> · day and month swapped by the shared parser</td><td>374</td><td><a href="https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/1">issue 1</a></td></tr><tr><td><code>hint</code> · booking-v3 form hints MM/DD to day-first tenants</td><td>33</td><td><a href="https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/2">issue 2</a></td></tr><tr><td><code>one-day</code> · date moves by one day</td><td>5</td><td><a href="https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/4">issue 4</a></td></tr><!--]--></tbody></table> <p>Counted with the desk’s own code: one report per id (<code>uniqueById</code>), cause by tenant and form
-(<code>causes.ts</code>), not by intake tag. The one-day moves are the reports the desk itself noted in <code>desk-notes.json</code>. <a href="/kb/incidents/4471">#4471</a> files them under <code>parser</code>; here they are taken out
-of <code>parser</code> and counted once, in their own ticket.</p> <h2><code>parser</code>: day and month swapped</h2> <p>Ticket: <a href="https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/1" rel="nofollow">https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/1</a></p> <p><strong>What people see.</strong> A date with day and month swapped: booked 7 April, invite for 4 July. Every
+Keep #4471 open until all three tickets are closed.<!----></aside><!----> <h2>The split</h2> <p>This is the desk’s own table for #4471, built from the export. Each problem in it has a ticket:</p> <ul><li><code>parser</code> row → <a href="https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/1" rel="nofollow">issue 1</a></li> <li><code>hint</code> row → <a href="https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/2" rel="nofollow">issue 2</a></li> <li>the one-day moves in the note under the table → <a href="https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/4" rel="nofollow">issue 4</a></li></ul> <p class="sum svelte-5f1c7s"><strong>412</strong> reports merged into #4471 · <strong>2</strong> causes</p> <table><thead><tr><th>cause</th><th>reports</th><th>tagged as</th><th>tenants</th><th>seen</th><th></th></tr></thead><tbody><!--[--><tr class="svelte-5f1c7s"><td class="svelte-5f1c7s"><code>parser</code></td><td class="svelte-5f1c7s">379</td><td class="tags svelte-5f1c7s">parser ×356 · hint ×23</td><td class="svelte-5f1c7s">11</td><td class="svelte-5f1c7s">2026-04-01 → 2026-10-04</td><td class="svelte-5f1c7s">#4471</td></tr><tr class="svelte-5f1c7s wrong"><td class="svelte-5f1c7s"><code>hint</code></td><td class="svelte-5f1c7s">33</td><td class="tags svelte-5f1c7s">hint ×18 · parser ×15</td><td class="svelte-5f1c7s">3</td><td class="svelte-5f1c7s">2026-04-17 → 2026-09-22</td><td class="svelte-5f1c7s">not this ticket — no ticket of its own</td></tr><!--]--></tbody></table> <!--[--><!--[--><p class="note svelte-5f1c7s">5 reports read as a one-day move; filed under <code>parser</code> by tenant.</p><!--]--><!--[!--><!--]--><!--]--><!----> <p>Each ticket carries the count this table shows. The one-day moves stay counted in the <code>parser</code> row, where the desk files them, so the one-day ticket is part of the <code>parser</code> ticket, not extra.
+Causes follow <code>causes.ts</code>: the tenant’s locale and booking form, not the intake tag.</p> <h2><code>parser</code>: day and month swapped</h2> <p>Ticket: <a href="https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/1" rel="nofollow">https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/1</a></p> <p><strong>What people see.</strong> A date with day and month swapped: booked 7 April, invite for 4 July. Every
 date in these reports has a day of 12 or less, because a day above 12 cannot be read as a month.</p> <p><strong>Who.</strong> Every tenant on file writes the day first. The app and email channels on any tenant, and
 the form on booking-v2 tenants, whose hint says DD/MM.</p> <p><strong>Fix.</strong> The shared parser has to read dates in the tenant’s locale, not month first. This is the
 fix #4471 already queued.</p> <h2><code>hint</code>: the booking-v3 form asks for the month first</h2> <p>Ticket: <a href="https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/2" rel="nofollow">https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/2</a></p> <p><strong>What people see.</strong> The same swap, but only through the booking form of Alder Physio,
@@ -41,7 +40,7 @@ the hint tells them, month first, and the form reads it the tenant’s way, day 
 fix does not touch this path.</p> <p><strong>Fix.</strong> The hint under the field has to follow the tenant’s locale, like booking-v2’s <code>DD/MM/YYYY</code> for day-first tenants.</p> <h2><code>one-day</code>: the date moves by one day</h2> <p>Ticket: <a href="https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/4" rel="nofollow">https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/4</a></p> <p><strong>What people see.</strong> Not a swap. Tuesday 12 May shows as Monday 11 May. A client in Lisbon gets
 Tuesday and a client in Toronto gets Monday for the same meeting. An invite arrives before the
 booking was made.</p> <p><strong>Why it is different.</strong> The desk had already read these as one-day moves (<code>desk-notes.json</code>),
-but #4471 files them under <code>parser</code> by tenant. They belong to this ticket, not the <code>parser</code> one. The date is converted across time zones, so it
+but #4471 files them under <code>parser</code> by tenant, and the <code>parser</code> ticket counts them too. The date is converted across time zones, so it
 lands on the neighbouring day. It needs a separate look at how invites store and send times.</p> <p><strong>Fix.</strong> Unknown yet. Start from these reports.</p> <h2>Why one ticket hid three</h2> <ul><li><a href="/kb/decisions/0001-dedupe-by-subject">Decision 0001</a> merges reports whose subject lines match.
 These subjects (wrong day, wrong date, dates mixed up) describe a symptom, not a cause, so
 three causes merged into one ticket.</li> <li>The intake tag is a guess from the browser, and it disagrees with the tenant in both directions.</li> <li>The export repeats some reports across pages. Counting raw rows inflates the queue.</li></ul> <p>Decision records are never edited after they are accepted, so 0001 needs a successor. Until then,
@@ -49,15 +48,15 @@ read the body before merging a report about dates.</p> <!--[--><p class="stamp s
 			
 			<script>
 				{
-					__sveltekit_n36jkp = {
+					__sveltekit_1kcyf0a = {
 						base: new URL("../../..", location).pathname.slice(0, -1)
 					};
 
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../../../_app/immutable/entry/start.C9NPMI6E.js"),
-						import("../../../_app/immutable/entry/app.dpw1JObR.js")
+						import("../../../_app/immutable/entry/start.D2N_MOeb.js"),
+						import("../../../_app/immutable/entry/app.DG1GfY9u.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 5],
