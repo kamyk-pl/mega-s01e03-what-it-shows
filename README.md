@@ -39,5 +39,5 @@ Exported 2026-10-04 from the `support` repo, `apps/kb/` → `src/`.
 
 - Page: `src/routes/kb/incidents/4471-split/+page.svx`, built only from the kb's own components (`CauseTable`).
 - As the desk sees it: `rendered/kb/incidents/4471-split/index.html` (static build), `rendered/4471-split.jpg` (screenshot).
-- Tickets: issues #1 `parser`, #2 `hint`, #3 `one-day` in this repo.
+- Tickets: issues #1 `parser`, #2 `hint` in this repo (#3 closed: the desk counts one-day moves under `parser`).
 - Build: `npm install && npm run build` (SvelteKit + mdsvex, config added on top of the export).
