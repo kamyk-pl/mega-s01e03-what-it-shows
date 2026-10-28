@@ -39,6 +39,6 @@ Exported 2026-10-04 from the `support` repo, `apps/kb/` → `src/`.
 
 - Page: `src/routes/kb/incidents/4471-split/+page.svx`, signed (desk ref in the stamp).
 - As the desk sees it: `rendered/kb/incidents/4471-split/index.html` (static build).
-- Logic: `causes.ts` gives the one-day moves from `desk-notes.json` their own cause, `timezone`; `CauseTable` links each cause to its ticket. So #4471's own table now shows the same three causes.
-- Tickets: #1 `parser`, #2 `hint`, #4 `timezone`.
+- Logic: the export's own `causes.ts`, unchanged. The page computes the split with it; the one-day moves from `desk-notes.json` are counted once, as their own problem.
+- Tickets: #1 `parser`, #2 `hint`, #4 one-day move.
 - Build: `npm install && npm run build` (SvelteKit + mdsvex, config added on top of the export).

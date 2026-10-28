@@ -4,11 +4,10 @@
   import { groupByCause, readAs, ticketCause, uniqueById, type Report } from '#lib/kb/causes';
   import { tenantOf } from '#lib/kb/locales';
 
-  // tickets: the ticket each cause was split into, cause → link. Without it, only #ticket is placed.
-  let { ticket, tickets = {} }: { ticket: number; tickets?: Record<string, string> } = $props();
+  let { ticket }: { ticket: number } = $props();
 
   const merged = $derived(uniqueById(reports as Report[]).filter((r) => r.mergedInto === ticket));
-  const groups = $derived(groupByCause(merged, tenantOf, notes.oneDayMove));
+  const groups = $derived(groupByCause(merged, tenantOf));
   const owner = $derived(ticketCause(groups, ticket));
   const tags = (g: { taggedAs: Record<string, number> }) =>
     Object.entries(g.taggedAs)
@@ -29,16 +28,13 @@
   </thead>
   <tbody>
     {#each groups as g (g.cause)}
-      <tr class:wrong={g.cause !== owner && !tickets[g.cause]}>
+      <tr class:wrong={g.cause !== owner}>
         <td><code>{g.cause}</code></td>
         <td>{g.reports.length}</td>
         <td class="tags">{tags(g)}</td>
         <td>{g.tenants}</td>
         <td>{g.firstSeen} → {g.lastSeen}</td>
-        <td>
-          {#if tickets[g.cause]}<a href={tickets[g.cause]}>{tickets[g.cause].replace(/^.*\/issues\//, '#')}</a>
-          {:else}{g.cause === owner ? `#${ticket}` : 'not this ticket — no ticket of its own'}{/if}
-        </td>
+        <td>{g.cause === owner ? `#${ticket}` : 'not this ticket — no ticket of its own'}</td>
       </tr>
     {/each}
   </tbody>
@@ -46,7 +42,7 @@
 
 {#each groups as g (g.cause)}
   {@const moved = readAs(g, notes.oneDayMove)}
-  {#if moved && g.cause !== 'timezone'}
+  {#if moved}
     <p class="note">{moved} reports read as a one-day move; filed under <code>{g.cause}</code> by tenant.</p>
   {/if}
 {/each}
