@@ -12,8 +12,11 @@ signature: v1.eyJzdWIiOiI0OTY1IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYX
   import Callout from '#lib/kb/Callout.svelte';
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
 
-  const REPO = 'https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues';
-  const tickets = { parser: `${REPO}/1`, hint: `${REPO}/2`, 'one-day': `${REPO}/3` };
+  const tickets = {
+    parser: 'https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/1',
+    hint: 'https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/2',
+    'one-day': 'https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/3',
+  };
 </script>
 
 [#4471](/kb/incidents/4471) says one issue, one fix queued. Its own table already disagrees: it
@@ -37,6 +40,8 @@ counted under the cause they are filed under, and also get a ticket of their own
 
 ## `parser`: day and month swapped
 
+Ticket: [https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/1](https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/1)
+
 **What people see.** A date with day and month swapped: booked 7 April, invite for 4 July. Every
 date in these reports has a day of 12 or less, because a day above 12 cannot be read as a month.
 
@@ -47,6 +52,8 @@ the form on booking-v2 tenants, whose hint says DD/MM.
 fix #4471 already queued.
 
 ## `hint`: the booking-v3 form asks for the month first
+
+Ticket: [https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/2](https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/2)
 
 **What people see.** The same swap, but only through the booking form of Alder Physio,
 Copper Studio and Pale Harbour.
@@ -59,6 +66,8 @@ fix does not touch this path.
 `DD/MM/YYYY` for day-first tenants.
 
 ## `one-day`: the date moves by one day
+
+Ticket: [https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/3](https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/3)
 
 **What people see.** Not a swap. Tuesday 12 May shows as Monday 11 May. A client in Lisbon gets
 Tuesday and a client in Toronto gets Monday for the same meeting. An invite arrives before the
