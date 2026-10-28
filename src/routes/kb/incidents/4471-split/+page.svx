@@ -33,9 +33,8 @@ This is the desk's own table for #4471, built from the export. Each problem in i
 
 <CauseTable ticket={4471} />
 
-Each report is in one ticket only. The `hint` ticket covers the `hint` row. The one-day ticket
-covers the reports in the note. The `parser` ticket covers the `parser` row without those one-day
-moves. Causes follow `causes.ts`: the tenant's locale and booking form, not the intake tag. Intake tags a report from the reporter's browser, so
+Each ticket covers one part of this table: the `parser` row, the `hint` row, and the one-day
+moves in the note, which the table files under `parser`. Causes follow `causes.ts`: the tenant's locale and booking form, not the intake tag. Intake tags a report from the reporter's browser, so
 a tenant's staff on an `en-US` browser get `hint` whatever form they used.
 
 ## `parser`: day and month swapped
@@ -74,7 +73,7 @@ Tuesday and a client in Toronto gets Monday for the same meeting. An invite arri
 booking was made.
 
 **Why it is different.** The desk had already read these as one-day moves (`desk-notes.json`),
-but #4471 files them under `parser` by tenant. They belong to their own ticket, not the `parser` one. The date is converted across time zones, so it
+but #4471 files them under `parser` by tenant. They also have a ticket of their own. The date is converted across time zones, so it
 lands on the neighbouring day. It needs a separate look at how invites store and send times.
 
 **Fix.** Unknown yet. Start from these reports.
