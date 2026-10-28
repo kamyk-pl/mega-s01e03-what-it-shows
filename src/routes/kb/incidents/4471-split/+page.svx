@@ -8,15 +8,9 @@ signature: v1.eyJzdWIiOiI0OTY1IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYX
 ---
 
 <script>
-  import TicketSplit from '#lib/kb/TicketSplit.svelte';
+  import CauseTable from '#lib/kb/CauseTable.svelte';
   import Callout from '#lib/kb/Callout.svelte';
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
-
-  const tickets = {
-    parser: 'https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/1',
-    hint: 'https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/2',
-    'one-day': 'https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/3',
-  };
 </script>
 
 [#4471](/kb/incidents/4471) says one issue, one fix queued. Its own table already disagrees: it
@@ -31,12 +25,18 @@ Keep #4471 open until all three tickets are closed.
 
 ## The split
 
-<TicketSplit ticket={4471} {tickets} />
+This is the desk's own table for #4471, built from the export. Each problem in it has a ticket:
 
-Reports are counted once per id, the way the desk's own table on #4471 counts them. Causes follow
-`causes.ts`: the tenant's locale and booking form, not the intake tag. The one-day moves stay
-counted under the cause they are filed under, and also get a ticket of their own. Intake tags a report from the reporter's browser, so a tenant's staff on an
-`en-US` browser get `hint` whatever form they used.
+- `parser` row → [issue 1](https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/1)
+- `hint` row → [issue 2](https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/2)
+- the one-day moves in the note under the table → [issue 3](https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/3)
+
+<CauseTable ticket={4471} />
+
+Every count in the tickets is the count this table shows. Causes follow `causes.ts`: the tenant's
+locale and booking form, not the intake tag. Intake tags a report from the reporter's browser, so
+a tenant's staff on an `en-US` browser get `hint` whatever form they used. The one-day moves stay
+filed under `parser` by tenant, as the desk files them, and also have a ticket of their own.
 
 ## `parser`: day and month swapped
 
