@@ -1,6 +1,6 @@
 ---
 layout: runbook
-title: '#4471 split: two problems, not one'
+title: '#4471 split: three problems, not one'
 owner: kamyk-pl
 status: proposed
 reviewed: 2026-10-28
@@ -14,27 +14,28 @@ signature: v1.eyJzdWIiOiI0OTY1IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYX
 </script>
 
 [#4471](/kb/incidents/4471) says one issue, one fix queued. Its own table already disagrees: it
-shows a second cause with no ticket of its own. Read by cause instead of by subject, the reports
-hold two problems. Each one has its own ticket now, and fixing one does not close the other.
+shows a second cause with no ticket of its own and a footnote about one-day moves. Read by cause
+instead of by subject, the reports hold three problems. Each one has its own ticket now, and
+fixing one does not close the others.
 
 <Callout kind="warn">
-The parser fix queued for #4471 will not stop the booking-v3 form reports.
-Keep #4471 open until both tickets are closed.
+The parser fix queued for #4471 will not stop the booking-v3 form reports or the one-day moves.
+Keep #4471 open until all three tickets are closed.
 </Callout>
 
 ## The split
 
-This is the desk's own table for #4471, built from the export. Each cause in it has a ticket:
+This is the desk's own table for #4471, built from the export. Each problem in it has a ticket:
 
 - `parser` row → [issue 1](https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/1)
 - `hint` row → [issue 2](https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/2)
+- the one-day moves in the note under the table → [issue 4](https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/4)
 
 <CauseTable ticket={4471} />
 
-Each ticket covers one row of this table, with the count the row shows. Causes follow
-`causes.ts`: the tenant's locale and booking form, not the intake tag. Intake tags a report from
-the reporter's browser, so a tenant's staff on an `en-US` browser get `hint` whatever form they
-used.
+Each report is in one ticket only: the `hint` row, the one-day moves in the note, and the
+`parser` row without those one-day moves. Causes follow `causes.ts`: the tenant's locale and booking form, not the intake tag. Intake tags a report from the reporter's browser, so
+a tenant's staff on an `en-US` browser get `hint` whatever form they used.
 
 ## `parser`: day and month swapped
 
@@ -63,17 +64,25 @@ fix does not touch this path.
 **Fix.** The hint under the field has to follow the tenant's locale, like booking-v2's
 `DD/MM/YYYY` for day-first tenants.
 
-## The one-day moves
+## `one-day`: the date moves by one day
 
-The note under the table lists reports the desk read as a one-day move, not a swap. They stay
-counted under `parser`, where they are filed, and the `parser` ticket names them. When the parser
-fix ships, check them again: a date that moves by one day points at time zones, not parsing.
+Ticket: [https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/4](https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues/4)
 
-## Why one ticket hid two
+**What people see.** Not a swap. Tuesday 12 May shows as Monday 11 May. A client in Lisbon gets
+Tuesday and a client in Toronto gets Monday for the same meeting. An invite arrives before the
+booking was made.
+
+**Why it is different.** The desk had already read these as one-day moves (`desk-notes.json`),
+but #4471 files them under `parser` by tenant. They belong to this ticket, not the `parser` one. The date is converted across time zones, so it
+lands on the neighbouring day. It needs a separate look at how invites store and send times.
+
+**Fix.** Unknown yet. Start from these reports.
+
+## Why one ticket hid three
 
 - [Decision 0001](/kb/decisions/0001-dedupe-by-subject) merges reports whose subject lines match.
   These subjects (wrong day, wrong date, dates mixed up) describe a symptom, not a cause, so
-  two causes merged into one ticket.
+  three causes merged into one ticket.
 - The intake tag is a guess from the browser, and it disagrees with the tenant in both directions.
 - The export repeats some reports across pages. Counting raw rows inflates the queue.
 
