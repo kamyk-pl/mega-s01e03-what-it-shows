@@ -4,9 +4,9 @@
   import { groupByCause, uniqueById, type Report } from '#lib/kb/causes';
   import { tenantOf } from '#lib/kb/locales';
 
-  // One row per problem a merged ticket holds. `parser` and `hint` come from causes.ts (tenant and
-  // form). The desk's one-day moves (desk-notes.json) are a third problem: the date moves by a day,
-  // it does not flip, so they leave the cause they were filed under and get a row of their own.
+  // One row per problem a merged ticket holds. `parser` and `hint` are counted as the desk counts them
+  // (causes.ts: tenant and form). The desk's one-day moves (desk-notes.json) are a third problem: the
+  // date moves by a day, it does not flip. They stay counted where they're filed and get a row too.
   let { ticket, tickets = {} }: { ticket: number; tickets?: Record<string, string> } = $props();
 
   const LABEL: Record<string, string> = {
@@ -19,14 +19,15 @@
   const rows = $derived.by(() => {
     const merged = uniqueById(reports as Report[]).filter((r) => r.mergedInto === ticket);
     const oneDay = merged.filter((r) => notes.oneDayMove.includes(r.id));
-    const rest = merged.filter((r) => !notes.oneDayMove.includes(r.id));
     const groups = [
-      ...groupByCause(rest, tenantOf),
+      ...groupByCause(merged, tenantOf),
       ...groupByCause(oneDay, tenantOf).map((g) => ({ ...g, cause: 'one-day' as const })),
     ];
     return groups.sort((a, b) => b.reports.length - a.reports.length);
   });
-  const total = $derived(rows.reduce((n, g) => n + g.reports.length, 0));
+  const merged = $derived(uniqueById(reports as Report[]).filter((r) => r.mergedInto === ticket));
+  const total = $derived(merged.length);
+  const filedUnder = $derived(groupByCause(merged.filter((r) => notes.oneDayMove.includes(r.id)), tenantOf).map((g) => g.cause));
   const rawRows = (reports as Report[]).filter((r) => r.mergedInto === ticket).length;
   const tags = (t: Record<string, number>) =>
     Object.entries(t)
@@ -47,7 +48,10 @@
   <tbody>
     {#each rows as g (g.cause)}
       <tr>
-        <td><code>{g.cause}</code><br /><span class="what">{LABEL[g.cause]}</span></td>
+        <td>
+          <code>{g.cause}</code><br /><span class="what">{LABEL[g.cause]}</span>
+          {#if g.cause === 'one-day'}<br /><span class="what">also counted under {filedUnder.join(', ')}, where the desk files them</span>{/if}
+        </td>
         <td>{g.reports.length}</td>
         <td class="tags">{tags(g.taggedAs)}</td>
         <td>{g.tenants}</td>

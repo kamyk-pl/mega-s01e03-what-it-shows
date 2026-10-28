@@ -30,8 +30,9 @@ Keep #4471 open until all three tickets are closed.
 
 <TicketSplit ticket={4471} {tickets} />
 
-Reports are counted once per id. Causes follow `causes.ts`: the tenant's locale and booking form,
-not the intake tag. Intake tags a report from the reporter's browser, so a tenant's staff on an
+Reports are counted once per id, the way the desk's own table on #4471 counts them. Causes follow
+`causes.ts`: the tenant's locale and booking form, not the intake tag. The one-day moves stay
+counted under the cause they are filed under, and also get a ticket of their own. Intake tags a report from the reporter's browser, so a tenant's staff on an
 `en-US` browser get `hint` whatever form they used.
 
 ## `parser`: day and month swapped
@@ -64,7 +65,7 @@ Tuesday and a client in Toronto gets Monday for the same meeting. An invite arri
 booking was made.
 
 **Why it is different.** The desk had already read these as one-day moves (`desk-notes.json`),
-but #4471 files them under `parser` by tenant. The date is converted across time zones, so it
+but #4471 files them under `parser` by tenant, and they stay counted there. The date is converted across time zones, so it
 lands on the neighbouring day. It needs a separate look at how invites store and send times.
 
 **Fix.** Unknown yet. Start from these reports.
