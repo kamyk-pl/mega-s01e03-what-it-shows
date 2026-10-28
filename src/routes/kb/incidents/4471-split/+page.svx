@@ -1,0 +1,83 @@
+---
+layout: runbook
+title: '#4471 split: three problems, not one'
+owner: kamyk-pl
+status: proposed
+reviewed: 2026-10-28
+signature: v1.eyJzdWIiOiI0OTY1IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMxOTIwNzksImV4cCI6MTc5MzI3ODQ3OX0.jth5DTVqTkBeGIXznIr97v6ZtuucGGDkXk5SM_YAM9M
+---
+
+<script>
+  import TicketSplit from '#lib/kb/TicketSplit.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+
+  const REPO = 'https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues';
+  const tickets = { parser: `${REPO}/1`, hint: `${REPO}/2`, 'one-day': `${REPO}/3` };
+</script>
+
+[#4471](/kb/incidents/4471) says one issue, one fix queued. Its own table already disagrees: it
+shows a second cause with no ticket of its own and a footnote about one-day moves. Read by cause
+instead of by subject, the reports hold three problems. Each one has its own ticket now, and
+fixing one does not close the others.
+
+<Callout kind="warn">
+The parser fix queued for #4471 will not stop the booking-v3 form reports or the one-day moves.
+Keep #4471 open until all three tickets are closed.
+</Callout>
+
+## The split
+
+<TicketSplit ticket={4471} {tickets} />
+
+Reports are counted once per id. Causes follow `causes.ts`: the tenant's locale and booking form,
+not the intake tag. Intake tags a report from the reporter's browser, so a tenant's staff on an
+`en-US` browser get `hint` whatever form they used.
+
+## `parser`: day and month swapped
+
+**What people see.** A date with day and month swapped: booked 7 April, invite for 4 July. Every
+date in these reports has a day of 12 or less, because a day above 12 cannot be read as a month.
+
+**Who.** Every tenant on file writes the day first. The app and email channels on any tenant, and
+the form on booking-v2 tenants, whose hint says DD/MM.
+
+**Fix.** The shared parser has to read dates in the tenant's locale, not month first. This is the
+fix #4471 already queued.
+
+## `hint`: the booking-v3 form asks for the month first
+
+**What people see.** The same swap, but only through the booking form of Alder Physio,
+Copper Studio and Pale Harbour.
+
+**Why it is different.** booking-v3 prints `MM/DD/YYYY` under its date field. People type what
+the hint tells them, month first, and the form reads it the tenant's way, day first. The parser
+fix does not touch this path.
+
+**Fix.** The hint under the field has to follow the tenant's locale, like booking-v2's
+`DD/MM/YYYY` for day-first tenants.
+
+## `one-day`: the date moves by one day
+
+**What people see.** Not a swap. Tuesday 12 May shows as Monday 11 May. A client in Lisbon gets
+Tuesday and a client in Toronto gets Monday for the same meeting. An invite arrives before the
+booking was made.
+
+**Why it is different.** The desk had already read these as one-day moves (`desk-notes.json`),
+but #4471 files them under `parser` by tenant. The date is converted across time zones, so it
+lands on the neighbouring day. It needs a separate look at how invites store and send times.
+
+**Fix.** Unknown yet. Start from these reports.
+
+## Why one ticket hid three
+
+- [Decision 0001](/kb/decisions/0001-dedupe-by-subject) merges reports whose subject lines match.
+  These subjects (wrong day, wrong date, dates mixed up) describe a symptom, not a cause, so
+  three causes merged into one ticket.
+- The intake tag is a guess from the browser, and it disagrees with the tenant in both directions.
+- The export repeats some reports across pages. Counting raw rows inflates the queue.
+
+Decision records are never edited after they are accepted, so 0001 needs a successor. Until then,
+read the body before merging a report about dates.
+
+<RenderStamp {signature} />
