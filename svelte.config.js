@@ -8,6 +8,8 @@ export default {
   kit: {
     adapter: adapter({ fallback: undefined }),
     alias: { '#lib': 'src/lib' },
-    prerender: { entries: ['*'], handleHttpError: 'warn' },
+    // GitHub Pages serves the site under /<repo>; BASE_PATH comes from the workflow.
+    paths: { base: process.env.BASE_PATH ?? '' },
+    prerender: { entries: ['*'], handleHttpError: 'warn', handleMissingId: 'warn' },
   },
 };

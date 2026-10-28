@@ -8,29 +8,15 @@ signature: v1.eyJzdWIiOiI0OTY1IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYX
 ---
 
 <script>
-  import reports from '#lib/data/reports-4471.json';
-  import notes from '#lib/data/desk-notes.json';
-  import { groupByCause, uniqueById } from '#lib/kb/causes';
-  import { tenantOf } from '#lib/kb/locales';
+  import CauseTable from '#lib/kb/CauseTable.svelte';
   import Callout from '#lib/kb/Callout.svelte';
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
 
   const repo = 'https://github.com/kamyk-pl/mega-s01e03-what-it-shows/issues';
-
-  // The desk's own grouping (causes.ts), with the one-day moves it noted taken out of the cause
-  // they were filed under: they are not a swap, so they are a problem of their own.
-  const merged = uniqueById(reports).filter((r) => r.mergedInto === 4471);
-  const moved = merged.filter((r) => notes.oneDayMove.includes(r.id));
-  const groups = groupByCause(merged.filter((r) => !notes.oneDayMove.includes(r.id)), tenantOf);
-  const count = (cause) => groups.find((g) => g.cause === cause)?.reports.length ?? 0;
-  const problems = [
-    { cause: 'parser', what: 'day and month swapped by the shared parser', n: count('parser'), ticket: 1 },
-    { cause: 'hint', what: 'booking-v3 form hints MM/DD to day-first tenants', n: count('hint'), ticket: 2 },
-    { cause: 'one-day move', what: 'date moves by one day, as across time zones', n: moved.length, ticket: 4 },
-  ];
+  const tickets = { parser: `${repo}/1`, hint: `${repo}/2`, timezone: `${repo}/4` };
 </script>
 
-[#4471](/kb/incidents/4471) says one issue, one fix queued. Its {merged.length} reports hold three
+[#4471](/kb/incidents/4471) says one issue, one fix queued. The reports in it hold three
 problems. Each has its own ticket now, and the fix queued for #4471 closes only the first.
 
 <Callout>
@@ -39,23 +25,11 @@ Not one issue. Fixing the parser leaves the booking-v3 hint and the one-day move
 
 ## The split
 
-<table>
-  <thead><tr><th>problem</th><th>reports</th><th>ticket</th></tr></thead>
-  <tbody>
-    {#each problems as p (p.cause)}
-      <tr>
-        <td><code>{p.cause}</code>: {p.what}</td>
-        <td>{p.n}</td>
-        <td><a href="{repo}/{p.ticket}">#{p.ticket}</a></td>
-      </tr>
-    {/each}
-  </tbody>
-</table>
+<CauseTable ticket={4471} {tickets} />
 
-`parser` and `hint` are the desk's causes from `causes.ts`, placed by tenant and channel. The
-one-day moves are the reports the desk noted in `desk-notes.json`. #4471's own table files them
-under `parser` by tenant, but day and month do not swap in them, so they are counted here once,
-as their own problem.
+The table is the desk's own: `causes.ts` places each report by its tenant and channel. One
+change: the one-day moves from `desk-notes.json` are now their own cause, `timezone`, instead of
+a footnote under `parser`.
 
 ## The three problems
 
@@ -66,7 +40,7 @@ as their own problem.
   write the day first. People type what the hint says, the form reads it the tenant's way, so
   the date swaps. The parser fix does not touch this path. Fix: the hint follows the tenant's
   locale, as booking-v2's does.
-- **one-day move**: no swap. The date moves by one day: the invite says Tuesday, the calendar
+- **`timezone`**: no swap. The date moves by one day: the invite says Tuesday, the calendar
   says Monday; a client in Lisbon and one in Toronto got different days for one meeting. Fix:
   not known yet; check how invites store and convert times.
 
@@ -74,6 +48,6 @@ as their own problem.
 
 [Decision 0001](/kb/decisions/0001-dedupe-by-subject) merges on the subject line, and none of
 the subjects names a cause. Intake's tag guesses from the reporter's browser, not the tenant,
-so it does not split them either.
+so it does not split them either. Read by cause, they come apart.
 
 <RenderStamp {signature} />

@@ -39,6 +39,7 @@ Exported 2026-10-04 from the `support` repo, `apps/kb/` → `src/`.
 
 - Page: `src/routes/kb/incidents/4471-split/+page.svx`, signed (desk ref in the stamp).
 - As the desk sees it: `rendered/kb/incidents/4471-split/index.html` (static build).
-- Logic: the export's own `causes.ts`, unchanged. The page computes the split with it; the one-day moves from `desk-notes.json` are counted once, as their own problem.
-- Tickets: #1 `parser`, #2 `hint`, #4 one-day move.
+- Logic: `causes.ts` gives the one-day moves from `desk-notes.json` their own cause, `timezone`; `CauseTable` links each cause to its ticket. #4471's own table shows the same three causes.
+- Site: `.github/workflows/pages.yml` builds the kb and publishes it on GitHub Pages: https://kamyk-pl.github.io/mega-s01e03-what-it-shows/kb/
+- Tickets: #1 `parser`, #2 `hint`, #4 `timezone`.
 - Build: `npm install && npm run build` (SvelteKit + mdsvex, config added on top of the export).
