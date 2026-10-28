@@ -17,8 +17,8 @@ export type Report = {
 
 export type Tenant = { handle: string; name: string; locale: string; form: 'booking-v2' | 'booking-v3' };
 
-export type Cause = 'parser' | 'hint';
-export const CAUSES: readonly Cause[] = ['parser', 'hint'];
+export type Cause = 'parser' | 'hint' | 'timezone';
+export const CAUSES: readonly Cause[] = ['parser', 'hint', 'timezone'];
 
 // What each booking form prints under its date field.
 const DATE_HINT: Record<Tenant['form'], string> = {
@@ -63,10 +63,17 @@ export type CauseGroup = {
   mergedInto: number[];
 };
 
-export function groupByCause(reports: Report[], tenantOf: (r: Report) => Tenant | undefined): CauseGroup[] {
+// A one-day move (desk-notes.json) is not a swap: day and month stay put and the date shifts by a
+// day, as when a time is converted across time zones. The tenant does not decide it, so it is its own
+// cause wherever it was filed.
+export function groupByCause(
+  reports: Report[],
+  tenantOf: (r: Report) => Tenant | undefined,
+  oneDayMoves: readonly string[] = [],
+): CauseGroup[] {
   const byCause = new Map<CauseGroup['cause'], Report[]>();
   for (const r of reports) {
-    const cause = causeOf(r, tenantOf(r)) ?? 'unplaced';
+    const cause = oneDayMoves.includes(r.id) ? 'timezone' : (causeOf(r, tenantOf(r)) ?? 'unplaced');
     byCause.set(cause, [...(byCause.get(cause) ?? []), r]);
   }
   return [...byCause.entries()]

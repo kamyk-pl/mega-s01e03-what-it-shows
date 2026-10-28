@@ -37,7 +37,8 @@ Exported 2026-10-04 from the `support` repo, `apps/kb/` → `src/`.
 
 ## #4471 split (2026-10-28)
 
-- Page: `src/routes/kb/incidents/4471-split/+page.svx`, built only from the kb's own components (`CauseTable`).
-- As the desk sees it: `rendered/kb/incidents/4471-split/index.html` (static build), `rendered/4471-split.jpg` (screenshot).
-- Tickets: issues #1 `parser`, #2 `hint`, #4 `one-day` in this repo.
+- Page: `src/routes/kb/incidents/4471-split/+page.svx`, signed (desk ref in the stamp).
+- As the desk sees it: `rendered/kb/incidents/4471-split/index.html` (static build).
+- Logic: `causes.ts` gives the one-day moves from `desk-notes.json` their own cause, `timezone`; `CauseTable` links each cause to its ticket. So #4471's own table now shows the same three causes.
+- Tickets: #1 `parser`, #2 `hint`, #4 `timezone`.
 - Build: `npm install && npm run build` (SvelteKit + mdsvex, config added on top of the export).
